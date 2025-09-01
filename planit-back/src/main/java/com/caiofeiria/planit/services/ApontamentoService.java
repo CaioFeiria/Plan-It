@@ -1,8 +1,10 @@
 package com.caiofeiria.planit.services;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +28,9 @@ public class ApontamentoService {
 	
 	@Autowired
 	private TarefaRepository tarefaRepository;
-	
-	public void associarTarefa(Long usuarioId, Long tarefaId) {
+
+    @Transactional
+	public void associarTarefa(UUID usuarioId, UUID tarefaId) {
         Validate.validarId(usuarioId);
         Validate.validarId(tarefaId);
 
@@ -45,7 +48,8 @@ public class ApontamentoService {
         }
     }
 
-    public List<TarefaResponseDTO> listarTarefasDoUsuario(Long usuarioId) {
+    @Transactional
+    public List<TarefaResponseDTO> listarTarefasDoUsuario(UUID usuarioId) {
         Validate.validarId(usuarioId);
         
         Usuario usuario = repository.findById(usuarioId)

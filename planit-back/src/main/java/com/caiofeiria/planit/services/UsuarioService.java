@@ -1,12 +1,5 @@
 package com.caiofeiria.planit.services;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.caiofeiria.planit.dtos.usuario.UsuarioRequestDTO;
 import com.caiofeiria.planit.dtos.usuario.UsuarioResponseDTO;
 import com.caiofeiria.planit.dtos.usuario.UsuarioUpdateDTO;
@@ -19,15 +12,24 @@ import com.caiofeiria.planit.models.Usuario;
 import com.caiofeiria.planit.repositories.TarefaRepository;
 import com.caiofeiria.planit.repositories.UsuarioRepository;
 import com.caiofeiria.planit.utils.Validate;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService {
 
-	@Autowired
-	private UsuarioRepository repository;
-	
-	@Autowired
-	private TarefaRepository tarefaRepository;
+	private final UsuarioRepository repository;
+	private final TarefaRepository tarefaRepository;
+
+	public UsuarioService(UsuarioRepository repository, TarefaRepository tarefaRepository){
+		this.repository = repository;
+		this.tarefaRepository = tarefaRepository;
+	}
 
 	public List<UsuarioResponseDTO> listarUsuarios() {
 		List<UsuarioResponseDTO> listarUsuarios = repository.findAll()
@@ -42,7 +44,7 @@ public class UsuarioService {
 		return listarUsuarios;
 	}
 
-	public UsuarioResponseDTO buscarPorId(Long id) {
+	public UsuarioResponseDTO buscarPorId(UUID id) {
 		Validate.validarId(id);
 		Usuario usuario = repository.findById(id).orElseThrow(UsuarioNotFoundException::new);
 
@@ -75,13 +77,15 @@ public class UsuarioService {
 		return listaUsuarios;
 	}
 
+	@Transactional
 	public UsuarioResponseDTO criarUsuario(UsuarioRequestDTO dto) {
 		Usuario usuario = UsuarioMapper.toEntity(dto);
 		repository.save(usuario);
 		return UsuarioMapper.toResponseDTO(usuario);
 	}
 
-	public UsuarioResponseDTO atualizarUsuario(Long id, UsuarioUpdateDTO dto) {
+	@Transactional
+	public UsuarioResponseDTO atualizarUsuario(UUID id, UsuarioUpdateDTO dto) {
 		Validate.validarId(id);
 
 		if (id != dto.id()) {
@@ -91,10 +95,10 @@ public class UsuarioService {
 		repository.findById(id)
 			.orElseThrow(UsuarioNotFoundException::new);
 		
-		List<Long> tarefasDTO = dto.tarefas();
+		List<UUID> tarefasDTO = dto.tarefas();
 		List<Tarefa> tarefas = new ArrayList<>();
 		
-		for (Long idTarefa : tarefasDTO) {
+		for (UUID idTarefa : tarefasDTO) {
 			Tarefa tarefa = tarefaRepository.findById(idTarefa)
 				.orElseThrow(TarefaNotFoundException::new);
 			
@@ -106,9 +110,11 @@ public class UsuarioService {
 		return UsuarioMapper.toResponseDTO(updated);
 	}
 
-	public void deletarUsuario(Long id) {
+	@Transactional
+	public void deletarUsuario(UUID id) {
 		Validate.validarId(id);
-		Usuario existing = repository.findById(id).orElseThrow(UsuarioNotFoundException::new);
+		Usuario existing = repository.findById(id)
+				.orElseThrow(UsuarioNotFoundException::new);
 		repository.deleteById(existing.getId());
 	}
 }

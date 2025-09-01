@@ -21,6 +21,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+import java.util.UUID;
+
 @Tag(name = "Usuários", description = "Todos os endpoints relacionados à Usuários")
 @RestController
 @RequestMapping("/api/usuarios")
@@ -37,7 +39,7 @@ public class UsuarioController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Procura um Usuário pelo seu ID", description = "Retorna os dados de um Usuário correspondente ao ID informado")
-    public ResponseEntity<?> getById(@PathVariable Long id) {
+    public ResponseEntity<?> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(service.buscarPorId(id));
     }
     
@@ -61,13 +63,13 @@ public class UsuarioController {
     
     @PutMapping("/{id}")
     @Operation(summary = "Atualiza um Usuário existente")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @Valid @RequestBody UsuarioUpdateDTO usuario) {
+    public ResponseEntity<?> updateUser(@PathVariable UUID id, @Valid @RequestBody UsuarioUpdateDTO usuario) {
     	return ResponseEntity.ok(service.atualizarUsuario(id, usuario));
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Deleta um Usuário", description = "Deleta um Usuário correspondente ao ID informado")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
         service.deletarUsuario(id);
         return ResponseEntity.noContent().build();
     }

@@ -1,46 +1,31 @@
 package com.caiofeiria.planit.models;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import org.springframework.validation.annotation.Validated;
-
 import com.caiofeiria.planit.enums.Prioridade;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.springframework.validation.annotation.Validated;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Validated
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "TB_TAREFAS")
 public class Tarefa {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_tarefas")
-    @SequenceGenerator(name = "seq_tarefas", sequenceName = "seq_tarefas", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "tarefa_id")
-    private Long id;
+    private UUID id;
 
     @NotBlank(message = "O nome da tarefa não pode estar em branco.")
     @Size(max = 100, message = "O nome da tarefa deve ter no máximo 100 caracteres.")

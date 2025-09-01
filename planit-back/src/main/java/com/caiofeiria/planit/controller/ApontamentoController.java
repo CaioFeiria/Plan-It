@@ -13,6 +13,8 @@ import com.caiofeiria.planit.services.ApontamentoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import java.util.UUID;
+
 @Tag(name = "Apontamentos", description = "Todos os endpoints relacionados à Apontamentos")
 @RestController
 @RequestMapping("/api/apontamentos")
@@ -24,8 +26,8 @@ public class ApontamentoController {
     @Operation(summary = "Cria um apontamento de tarefa para o usuário", description = "Associa uma tarefa a um usuário")
     @PostMapping("/{usuarioId}/tarefas/{tarefaId}")
     public ResponseEntity<String> criarApontamento(
-            @PathVariable Long usuarioId,
-            @PathVariable Long tarefaId
+            @PathVariable UUID usuarioId,
+            @PathVariable UUID tarefaId
     ) {
         service.associarTarefa(usuarioId, tarefaId);
         return ResponseEntity.ok("Apontamento criado com sucesso.");
@@ -33,7 +35,7 @@ public class ApontamentoController {
 
     @Operation(summary = "Lista apontamentos de um usuário", description = "Retorna as tarefas apontadas ao usuário")
     @GetMapping("/usuarios/{usuarioId}")
-    public ResponseEntity<?> listarApontamentosDoUsuario(@PathVariable Long usuarioId) {
+    public ResponseEntity<?> listarApontamentosDoUsuario(@PathVariable UUID usuarioId) {
         return ResponseEntity.ok(service.listarTarefasDoUsuario(usuarioId));
     }
 }

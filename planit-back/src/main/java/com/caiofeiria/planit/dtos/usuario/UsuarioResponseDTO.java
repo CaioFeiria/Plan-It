@@ -1,6 +1,7 @@
 package com.caiofeiria.planit.dtos.usuario;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.caiofeiria.planit.models.Tarefa;
 
@@ -12,7 +13,7 @@ import jakarta.validation.constraints.Size;
 public record UsuarioResponseDTO(
 
     @NotNull
-    Long id,
+    UUID id,
 
     @NotBlank
     @Size(max = 100)

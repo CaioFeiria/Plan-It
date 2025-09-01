@@ -21,6 +21,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+import java.util.UUID;
+
 @Tag(name = "Projetos", description = "Todos os endpoints relacionados à Projetos")
 @RestController
 @RequestMapping("/api")
@@ -37,7 +39,7 @@ public class ProjetoController {
 
     @GetMapping("/projetos/{id}")
     @Operation(summary = "Procura um Projeto pelo seu ID", description = "Retorna os dados de um Projeto correspondente ao ID informado")
-    public ResponseEntity<?> getById(@PathVariable Long id) {
+    public ResponseEntity<?> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(service.buscarPorId(id));
     }
     
@@ -55,13 +57,13 @@ public class ProjetoController {
 
     @PutMapping("/projetos/{id}")
     @Operation(summary = "Atualiza um Projeto existente")
-    public ResponseEntity<?> updateProject(@PathVariable Long id, @Valid @RequestBody ProjetoResponseDTO projeto) {
+    public ResponseEntity<?> updateProject(@PathVariable UUID id, @Valid @RequestBody ProjetoResponseDTO projeto) {
         return ResponseEntity.ok(service.atualizarProjeto(id, projeto));
     }
 
     @DeleteMapping("/projetos/{id}")
     @Operation(summary = "Deleta um Projeto", description = "Deleta um Projeto correspondente ao ID informado")
-    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+    public ResponseEntity<?> deleteById(@PathVariable UUID id) {
         service.deletarProjeto(id);
         return ResponseEntity.noContent().build();
     }

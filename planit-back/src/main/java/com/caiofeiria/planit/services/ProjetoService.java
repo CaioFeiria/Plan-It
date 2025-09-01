@@ -1,8 +1,10 @@
 package com.caiofeiria.planit.services;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +25,9 @@ public class ProjetoService {
 	private ProjetoRepository repository;
 
 	public List<ProjetoResponseDTO> listarProjetos() {
-		List<ProjetoResponseDTO> listaProjetos = repository.findAll().stream().map(ProjetoMapper::toResponseDTO)
+		List<ProjetoResponseDTO> listaProjetos = repository.findAll()
+				.stream()
+				.map(ProjetoMapper::toResponseDTO)
 				.collect(Collectors.toList());
 
 		if (listaProjetos.isEmpty()) {
@@ -33,16 +37,20 @@ public class ProjetoService {
 		return listaProjetos;
 	}
 
-	public ProjetoResponseDTO buscarPorId(Long id) {
+	public ProjetoResponseDTO buscarPorId(UUID id) {
 		Validate.validarId(id);
-		Projeto projeto = repository.findById(id).orElseThrow(ProjetoNotFoundException::new);
+
+		Projeto projeto = repository.findById(id)
+				.orElseThrow(ProjetoNotFoundException::new);
 
 		return ProjetoMapper.toResponseDTO(projeto);
 	}
 
 	public List<ProjetoResponseDTO> buscarPorNome(String nome) {
-		List<ProjetoResponseDTO> listaNomes = repository.findByNomeContainingIgnoreCase(nome).stream()
-				.map(ProjetoMapper::toResponseDTO).collect(Collectors.toList());
+		List<ProjetoResponseDTO> listaNomes = repository.findByNomeContainingIgnoreCase(nome)
+				.stream()
+				.map(ProjetoMapper::toResponseDTO)
+				.toList();
 
 		if (listaNomes.isEmpty()) {
 			throw new ProjetoNoContentException();
@@ -51,13 +59,15 @@ public class ProjetoService {
 		return listaNomes;
 	}
 
+	@Transactional
 	public ProjetoResponseDTO criarProjeto(ProjetoRequestDTO dto) {
 		Projeto projeto = ProjetoMapper.toEntity(dto);
 		repository.save(projeto);
 		return ProjetoMapper.toResponseDTO(projeto);
 	}
 
-	public ProjetoResponseDTO atualizarProjeto(Long id, ProjetoResponseDTO dto) {
+	@Transactional
+	public ProjetoResponseDTO atualizarProjeto(UUID id, ProjetoResponseDTO dto) {
 		Validate.validarId(id);
 
 		if (id != dto.id()) {
@@ -69,9 +79,13 @@ public class ProjetoService {
 		return ProjetoMapper.toResponseDTO(updated);
 	}
 
-	public void deletarProjeto(Long id) {
+	@Transactional
+	public void deletarProjeto(UUID id) {
 		Validate.validarId(id);
-		Projeto existing = repository.findById(id).orElseThrow(ProjetoNotFoundException::new);
+
+		Projeto existing = repository.findById(id)
+				.orElseThrow(ProjetoNotFoundException::new);
+
 		repository.deleteById(existing.getId());
 	}
 }

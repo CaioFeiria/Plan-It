@@ -1,18 +1,17 @@
 package com.caiofeiria.planit.models;
 
-import org.springframework.validation.annotation.Validated;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.springframework.validation.annotation.Validated;
+
+import java.util.UUID;
 
 @Entity
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Validated
@@ -20,10 +19,9 @@ import lombok.Setter;
 public class Projeto {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_projetos")
-    @SequenceGenerator(name = "seq_projetos", sequenceName = "seq_projetos", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "projeto_id")
-    private Long id;
+    private UUID id;
 
     @NotBlank(message = "Digite o nome do Projeto.")
     @Size(min = 3, max = 100, message = "O nome deve ter entre 3 e 100 caracteres.")
