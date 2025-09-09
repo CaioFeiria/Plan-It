@@ -1,21 +1,19 @@
 package com.caiofeiria.planit.dtos.tarefa;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-
 import com.caiofeiria.planit.dtos.usuario.UsuarioResumoDTO;
 import com.caiofeiria.planit.enums.Prioridade;
 import com.caiofeiria.planit.models.Projeto;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 public record TarefaResponseDTO(
 
     @NotNull
-    UUID id,
+    Long id,
 
     @NotBlank
     @Size(min = 3 ,max = 100)

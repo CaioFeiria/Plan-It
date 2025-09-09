@@ -9,7 +9,7 @@ import java.util.UUID;
 public record ProjetoResponseDTO(
 
         @NotNull
-        UUID id,
+        Long id,
 
         @NotBlank
         @Size(min = 3, max = 100)

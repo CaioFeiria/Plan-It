@@ -12,7 +12,6 @@ import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Validated
@@ -25,7 +24,7 @@ public class Tarefa {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "tarefa_id")
-    private UUID id;
+    private Long id;
 
     @NotBlank(message = "O nome da tarefa não pode estar em branco.")
     @Size(max = 100, message = "O nome da tarefa deve ter no máximo 100 caracteres.")

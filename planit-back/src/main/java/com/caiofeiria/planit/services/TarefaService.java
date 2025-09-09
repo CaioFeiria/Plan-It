@@ -1,14 +1,5 @@
 package com.caiofeiria.planit.services;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.caiofeiria.planit.dtos.tarefa.TarefaRequestDTO;
 import com.caiofeiria.planit.dtos.tarefa.TarefaResponseDTO;
 import com.caiofeiria.planit.dtos.tarefa.TarefaUpdateDTO;
@@ -26,8 +17,15 @@ import com.caiofeiria.planit.repositories.ProjetoRepository;
 import com.caiofeiria.planit.repositories.TarefaRepository;
 import com.caiofeiria.planit.repositories.UsuarioRepository;
 import com.caiofeiria.planit.utils.Validate;
-
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class TarefaService {
@@ -43,9 +41,9 @@ public class TarefaService {
 
 	public List<TarefaResponseDTO> listarTarefas() {
 		List<TarefaResponseDTO> listaTarefas = tarefaRepository.findAll()
-				.stream().
-				map(TarefaMapper::toResponseDTO)
-				.collect(Collectors.toList());
+				.stream()
+				.map(TarefaMapper::toResponseDTO)
+				.toList();
 
 		if (listaTarefas.isEmpty()) {
 			throw new TarefaNoContentException();
@@ -54,7 +52,7 @@ public class TarefaService {
 		return listaTarefas;
 	}
 
-	public TarefaResponseDTO buscarPorId(UUID id) {
+	public TarefaResponseDTO buscarPorId(Long id) {
 		Validate.validarId(id);
 		Tarefa tarefa = tarefaRepository.findById(id)
 				.orElseThrow(TarefaNoContentException::new);
@@ -75,15 +73,13 @@ public class TarefaService {
 		Usuario usuario = usuarioRepository.findById(dto.responsavelId())
 				.orElseThrow(UsuarioNotFoundException::new);
 				
-		List<UUID> usuariosIds = dto.usuariosIds();
+		List<Long> usuariosIds = dto.usuariosIds();
 		List<Usuario> usuarios = new ArrayList<>();
-		
-		for (UUID idUsuario : usuariosIds) {
-			Usuario usuarioModel = usuarioRepository.findById(idUsuario)
-					.orElseThrow(UsuarioNotFoundException::new);
-			
-			usuarios.add(usuarioModel);
-		}
+
+		usuarios = usuariosIds.stream()
+				.map(usuarioId -> usuarioRepository.findById(usuarioId)
+						.orElseThrow(UsuarioNotFoundException::new))
+				.toList();
 		
 		Tarefa tarefa = TarefaMapper.toEntity(dto);
 		tarefa.setDataCriacao(LocalDateTime.now());
@@ -95,7 +91,7 @@ public class TarefaService {
 	}
 
 	@Transactional
-	public TarefaResponseDTO atualizarTarefa(UUID id, TarefaUpdateDTO dto) {
+	public TarefaResponseDTO atualizarTarefa(Long id, TarefaUpdateDTO dto) {
 		Validate.validarId(id);
 
 		if (id != dto.id()) {
@@ -108,15 +104,13 @@ public class TarefaService {
 		Usuario responsavel = usuarioRepository.findById(dto.responsavelId())
 				.orElseThrow(UsuarioNotFoundException::new);
 		
-		List<UUID> usuariosIds = dto.usuariosIds();
+		List<Long> usuariosIds = dto.usuariosIds();
 		List<Usuario> usuarios = new ArrayList<>();
-		
-		for (UUID idUsuario : usuariosIds) {
-			Usuario usuarioModel = usuarioRepository.findById(idUsuario)
-					.orElseThrow(UsuarioNotFoundException::new);
-			
-			usuarios.add(usuarioModel);
-		}
+
+		usuarios = usuariosIds.stream()
+				.map(usuarioId -> usuarioRepository.findById(usuarioId)
+						.orElseThrow(UsuarioNotFoundException::new))
+				.toList();
 
 		Tarefa updated = TarefaMapper.updateEntityDTO(dto, projeto, responsavel, usuarios);
 		
@@ -127,7 +121,7 @@ public class TarefaService {
 	}
 
 	@Transactional
-	public void deletarTarefa(UUID id) {
+	public void deletarTarefa(Long id) {
 		Validate.validarId(id);
 		
 		Tarefa existing = tarefaRepository.findById(id)

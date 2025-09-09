@@ -1,10 +1,8 @@
 package com.caiofeiria.planit.exceptions.invalid;
 
-import java.util.UUID;
-
 public class InvalidIdNullOrNegativeException extends InvalidException{
 
-	public InvalidIdNullOrNegativeException(UUID id) {
+	public InvalidIdNullOrNegativeException(Long id) {
 		super("O Id está inválido: " + id);
 	}
 }

@@ -11,7 +11,7 @@ import java.util.UUID;
 public record UsuarioUpdateDTO(
     
 	@NotNull(message = "Id não pode ser nulo.")
-    UUID id,
+    Long id,
 
     @NotBlank(message = "Digite o nome do Usuário.")
     @Size(min = 3 ,max = 100, message = "O nome do Usuário deve ter entre 3 e 100 caracteres.")
@@ -21,5 +21,5 @@ public record UsuarioUpdateDTO(
     @Email(message = "Email inválido.")
     String email,
     
-    List<UUID> tarefas
+    List<Long> tarefas
 ) {}

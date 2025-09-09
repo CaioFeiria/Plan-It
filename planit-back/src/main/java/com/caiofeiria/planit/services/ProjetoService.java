@@ -37,7 +37,7 @@ public class ProjetoService {
 		return listaProjetos;
 	}
 
-	public ProjetoResponseDTO buscarPorId(UUID id) {
+	public ProjetoResponseDTO buscarPorId(Long id) {
 		Validate.validarId(id);
 
 		Projeto projeto = repository.findById(id)
@@ -67,7 +67,7 @@ public class ProjetoService {
 	}
 
 	@Transactional
-	public ProjetoResponseDTO atualizarProjeto(UUID id, ProjetoResponseDTO dto) {
+	public ProjetoResponseDTO atualizarProjeto(Long id, ProjetoResponseDTO dto) {
 		Validate.validarId(id);
 
 		if (id != dto.id()) {
@@ -80,7 +80,7 @@ public class ProjetoService {
 	}
 
 	@Transactional
-	public void deletarProjeto(UUID id) {
+	public void deletarProjeto(Long id) {
 		Validate.validarId(id);
 
 		Projeto existing = repository.findById(id)

@@ -1,20 +1,18 @@
 package com.caiofeiria.planit.dtos.tarefa;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-
 import com.caiofeiria.planit.enums.Prioridade;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 public record TarefaUpdateDTO(
 		
 		@NotNull
-		UUID id,
+		Long id,
 		
 		@NotBlank(message = "Digite o titulo da Tarefa.")
         @Size(min = 3, max = 100, message = "O titulo deve da Tarefa ter entre 3 e 100 caracteres.")
@@ -37,15 +35,15 @@ public record TarefaUpdateDTO(
 	    LocalDateTime dataConclusao,
 
 	    @NotNull(message = "Id do projeto não pode ser nulo.")
-		UUID projetoId,
+		Long projetoId,
 
 	    @NotNull(message = "Id do responsável não pode ser nulo.")
-		UUID responsavelId,
+		Long responsavelId,
 
 	    @Schema(
 	            description = "IDs dos usuários participantes da tarefa. Para não informar nenhum usuário, omita completamente este campo ou envie um array vazio []",
 	            example = "[1, 2, 3]",
 	            nullable = true
 	        )
-	    List<UUID> usuariosIds
+	    List<Long> usuariosIds
 ) {}

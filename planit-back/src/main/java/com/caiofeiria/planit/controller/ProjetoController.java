@@ -1,27 +1,15 @@
 package com.caiofeiria.planit.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.caiofeiria.planit.dtos.projeto.ProjetoRequestDTO;
 import com.caiofeiria.planit.dtos.projeto.ProjetoResponseDTO;
 import com.caiofeiria.planit.services.ProjetoService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-
-import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Projetos", description = "Todos os endpoints relacionados à Projetos")
 @RestController
@@ -39,7 +27,7 @@ public class ProjetoController {
 
     @GetMapping("/projetos/{id}")
     @Operation(summary = "Procura um Projeto pelo seu ID", description = "Retorna os dados de um Projeto correspondente ao ID informado")
-    public ResponseEntity<?> getById(@PathVariable UUID id) {
+    public ResponseEntity<?> getById(@PathVariable Long id) {
         return ResponseEntity.ok(service.buscarPorId(id));
     }
     
@@ -57,13 +45,13 @@ public class ProjetoController {
 
     @PutMapping("/projetos/{id}")
     @Operation(summary = "Atualiza um Projeto existente")
-    public ResponseEntity<?> updateProject(@PathVariable UUID id, @Valid @RequestBody ProjetoResponseDTO projeto) {
+    public ResponseEntity<?> updateProject(@PathVariable Long id, @Valid @RequestBody ProjetoResponseDTO projeto) {
         return ResponseEntity.ok(service.atualizarProjeto(id, projeto));
     }
 
     @DeleteMapping("/projetos/{id}")
     @Operation(summary = "Deleta um Projeto", description = "Deleta um Projeto correspondente ao ID informado")
-    public ResponseEntity<?> deleteById(@PathVariable UUID id) {
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
         service.deletarProjeto(id);
         return ResponseEntity.noContent().build();
     }

@@ -1,26 +1,15 @@
 package com.caiofeiria.planit.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.caiofeiria.planit.dtos.tarefa.TarefaRequestDTO;
 import com.caiofeiria.planit.dtos.tarefa.TarefaUpdateDTO;
 import com.caiofeiria.planit.services.TarefaService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-
-import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Tarefas", description = "Todos os endpoints relacionados à Tarefas")
 @RestController
@@ -38,7 +27,7 @@ public class TarefaController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Procura uma Tarefa pelo seu ID", description = "Retorna os dados de uma Tarefa correspondente ao ID informado")
-    public ResponseEntity<?> getById(@PathVariable UUID id) {
+    public ResponseEntity<?> getById(@PathVariable Long id) {
         return ResponseEntity.ok(service.buscarPorId(id));
     }
 
@@ -50,13 +39,13 @@ public class TarefaController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Atualiza uma Tarefa existente")
-    public ResponseEntity<?> updateTask(@PathVariable("id") UUID id, @Valid @RequestBody TarefaUpdateDTO dto) {
+    public ResponseEntity<?> updateTask(@PathVariable("id") Long id, @Valid @RequestBody TarefaUpdateDTO dto) {
         return ResponseEntity.ok(service.atualizarTarefa(id, dto));
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Deleta uma Tarefa", description = "Deleta uma Tarefa correspondente ao ID informado")
-    public ResponseEntity<?> deleteById(@PathVariable UUID id) {
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
         service.deletarTarefa(id);
         return ResponseEntity.noContent().build();
     }

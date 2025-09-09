@@ -8,8 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.UUID;
-
 @Entity
 @Data
 @AllArgsConstructor
@@ -21,7 +19,7 @@ public class Projeto {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "projeto_id")
-    private UUID id;
+    private Long id;
 
     @NotBlank(message = "Digite o nome do Projeto.")
     @Size(min = 3, max = 100, message = "O nome deve ter entre 3 e 100 caracteres.")

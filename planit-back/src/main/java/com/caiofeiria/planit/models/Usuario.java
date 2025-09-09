@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Validated
@@ -23,7 +22,7 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "usuario_id")
-    private UUID id;
+    private Long id;
 
     @NotBlank(message = "Digite seu nome.")
     @Size(min = 3, max = 100, message = "O nome deve ter entre 3 e 100 caracteres.")

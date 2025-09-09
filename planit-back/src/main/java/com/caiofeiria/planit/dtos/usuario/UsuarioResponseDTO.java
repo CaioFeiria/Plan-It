@@ -1,19 +1,17 @@
 package com.caiofeiria.planit.dtos.usuario;
 
-import java.util.List;
-import java.util.UUID;
-
 import com.caiofeiria.planit.models.Tarefa;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
+
 public record UsuarioResponseDTO(
 
     @NotNull
-    UUID id,
+    Long id,
 
     @NotBlank
     @Size(max = 100)

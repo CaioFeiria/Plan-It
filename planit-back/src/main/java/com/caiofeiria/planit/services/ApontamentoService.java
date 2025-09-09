@@ -1,13 +1,5 @@
 package com.caiofeiria.planit.services;
 
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.caiofeiria.planit.dtos.tarefa.TarefaResponseDTO;
 import com.caiofeiria.planit.exceptions.invalid.TarefaInvalidaException;
 import com.caiofeiria.planit.exceptions.nocontent.TarefaNoContentException;
@@ -19,6 +11,12 @@ import com.caiofeiria.planit.models.Usuario;
 import com.caiofeiria.planit.repositories.TarefaRepository;
 import com.caiofeiria.planit.repositories.UsuarioRepository;
 import com.caiofeiria.planit.utils.Validate;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ApontamentoService {
@@ -30,7 +28,7 @@ public class ApontamentoService {
 	private TarefaRepository tarefaRepository;
 
     @Transactional
-	public void associarTarefa(UUID usuarioId, UUID tarefaId) {
+	public void associarTarefa(Long usuarioId, Long tarefaId) {
         Validate.validarId(usuarioId);
         Validate.validarId(tarefaId);
 
@@ -49,7 +47,7 @@ public class ApontamentoService {
     }
 
     @Transactional
-    public List<TarefaResponseDTO> listarTarefasDoUsuario(UUID usuarioId) {
+    public List<TarefaResponseDTO> listarTarefasDoUsuario(Long usuarioId) {
         Validate.validarId(usuarioId);
         
         Usuario usuario = repository.findById(usuarioId)

@@ -1,15 +1,13 @@
 package com.caiofeiria.planit.dtos.tarefa;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-
 import com.caiofeiria.planit.enums.Prioridade;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Schema(description = "DTO para criação de tarefas. O campo 'usuariosIds' é opcional.")
 public record TarefaRequestDTO(
@@ -32,16 +30,16 @@ public record TarefaRequestDTO(
 	    LocalDateTime dataConclusao,
 
 	    @NotNull(message = "Id do projeto não pode ser nulo.")
-		UUID projetoId,
+		Long projetoId,
 
 	    @NotNull(message = "Id do responsável não pode ser nulo.")
-		UUID responsavelId,
+		Long responsavelId,
 
 	    @Schema(
 	            description = "IDs dos usuários participantes da tarefa. Para não informar nenhum usuário, omita completamente este campo ou envie um array vazio []",
 	            example = "[1, 2, 3]",
 	            nullable = true
 	        )
-	    List<UUID> usuariosIds
+	    List<Long> usuariosIds
 
 	) {}

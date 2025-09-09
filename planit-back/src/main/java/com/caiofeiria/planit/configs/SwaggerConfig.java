@@ -27,15 +27,13 @@ public class SwaggerConfig {
                             Permite criar, listar, atualizar e deletar projetos, atribuir responsáveis,
                             filtrar tarefas por prazo e prioridade, e muito mais.
                             """)
-                        .termsOfService("https://example.com/terms")
                         .contact(new Contact()
-                            .name("Caio Feiria")
-                            .email("caio.feiria@example.com"))
+                            .name("Contato - GitHub")
+                            .url("https://github.com/CaioFeiria"))
                         .license(new License()
                             .name("Apache 2.0")
                             .url("https://www.apache.org/licenses/LICENSE-2.0.html"))
                     )
-                    // --- Agrupamento de endpoints por tag ---
                     .tags(List.of(
                         new Tag()
                             .name("Projetos")
@@ -47,8 +45,6 @@ public class SwaggerConfig {
                             .name("Tarefas")
                             .description("Operações de CRUD para Tarefas")
                     ))
-                    
-                    // --- Documentação externa adicional (opcional) ---
                     .externalDocs(new ExternalDocumentation()
                         .description("Repositório no GitHub")
                         .url("https://github.com/caiofeiria/planit-api"));

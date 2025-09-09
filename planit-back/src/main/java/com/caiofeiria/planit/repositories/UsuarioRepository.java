@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 	
 	List<Usuario> findByNomeContainingIgnoreCase(String nome);
 	
@@ -18,9 +18,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
 	List<Usuario> buscarPorEmail(@Param("email") String email);
 
 	@Query(value = "SELECT tarefa_id FROM usuario_tarefa WHERE usuario_id = :id", nativeQuery = true)
-	List<UUID> buscarTarefaIdsPorUsuario(@Param("id") UUID usuarioId);
+	List<Long> buscarTarefaIdsPorUsuario(@Param("id") Long usuarioId);
 	
     @Query(value = "DELETE FROM usuario_tarefa WHERE tarefa_id = :idTarefa", nativeQuery = true)
-    void deleteByTarefaId(@Param("idTarefa") UUID idTarefa);
+    void deleteByTarefaId(@Param("idTarefa") Long idTarefa);
 
 }

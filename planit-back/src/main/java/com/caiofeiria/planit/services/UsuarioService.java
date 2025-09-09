@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,7 +43,7 @@ public class UsuarioService {
 		return listarUsuarios;
 	}
 
-	public UsuarioResponseDTO buscarPorId(UUID id) {
+	public UsuarioResponseDTO buscarPorId(Long id) {
 		Validate.validarId(id);
 		Usuario usuario = repository.findById(id).orElseThrow(UsuarioNotFoundException::new);
 
@@ -85,7 +84,7 @@ public class UsuarioService {
 	}
 
 	@Transactional
-	public UsuarioResponseDTO atualizarUsuario(UUID id, UsuarioUpdateDTO dto) {
+	public UsuarioResponseDTO atualizarUsuario(Long id, UsuarioUpdateDTO dto) {
 		Validate.validarId(id);
 
 		if (id != dto.id()) {
@@ -95,15 +94,13 @@ public class UsuarioService {
 		repository.findById(id)
 			.orElseThrow(UsuarioNotFoundException::new);
 		
-		List<UUID> tarefasDTO = dto.tarefas();
+		List<Long> tarefasDTO = dto.tarefas();
 		List<Tarefa> tarefas = new ArrayList<>();
-		
-		for (UUID idTarefa : tarefasDTO) {
-			Tarefa tarefa = tarefaRepository.findById(idTarefa)
-				.orElseThrow(TarefaNotFoundException::new);
-			
-			tarefas.add(tarefa);
-		}
+
+		tarefas = tarefasDTO.stream()
+				.map(tarefa -> tarefaRepository.findById(tarefa)
+						.orElseThrow(TarefaNotFoundException::new))
+				.toList();
 
 		Usuario updated = UsuarioMapper.toEntityUpdate(dto, tarefas);
 		repository.save(updated);
@@ -111,7 +108,7 @@ public class UsuarioService {
 	}
 
 	@Transactional
-	public void deletarUsuario(UUID id) {
+	public void deletarUsuario(Long id) {
 		Validate.validarId(id);
 		Usuario existing = repository.findById(id)
 				.orElseThrow(UsuarioNotFoundException::new);
