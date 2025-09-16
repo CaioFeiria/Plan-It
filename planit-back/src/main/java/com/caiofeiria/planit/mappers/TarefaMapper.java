@@ -8,6 +8,7 @@ import com.caiofeiria.planit.dtos.tarefa.TarefaRequestDTO;
 import com.caiofeiria.planit.dtos.tarefa.TarefaResponseDTO;
 import com.caiofeiria.planit.dtos.tarefa.TarefaUpdateDTO;
 import com.caiofeiria.planit.dtos.usuario.UsuarioResumoDTO;
+import com.caiofeiria.planit.dtos.projeto.ProjetoResumoDTO;
 import com.caiofeiria.planit.models.Projeto;
 import com.caiofeiria.planit.models.Tarefa;
 import com.caiofeiria.planit.models.Usuario;
@@ -59,6 +60,12 @@ public class TarefaMapper {
     private static UsuarioResumoDTO toUsuarioResumoDto(Usuario usuario) {
         return usuario != null ?
             new UsuarioResumoDTO(usuario.getId(), usuario.getNome(), usuario.getEmail()) :
+            null;
+    }
+
+    private static ProjetoResumoDTO toProjetoResumoDto(Projeto projeto) {
+        return projeto != null ?
+            new ProjetoResumoDTO(projeto.getId(), projeto.getNome(), projeto.getDescricao(), projeto.getEmoji()) :
             null;
     }
 

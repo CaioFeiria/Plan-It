@@ -17,7 +17,8 @@ public class ProjetoMapper {
         return new ProjetoResponseDTO(
                 e.getId(),
                 e.getNome(),
-                e.getDescricao()
+                e.getDescricao(),
+                e.getEmoji()
         );
     }
     
@@ -30,7 +31,8 @@ public class ProjetoMapper {
     public static ProjetoRequestDTO toRequestDTO(Projeto e) {
     	return new ProjetoRequestDTO(
     			e.getNome(),
-    			e.getDescricao()
+    			e.getDescricao(),
+    			e.getEmoji()
     	);
     }
 }

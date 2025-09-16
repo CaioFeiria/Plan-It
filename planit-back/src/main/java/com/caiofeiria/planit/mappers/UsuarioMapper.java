@@ -38,6 +38,7 @@ public class UsuarioMapper {
         e.setId(dto.id());
         e.setNome(dto.nome());
         e.setEmail(dto.email());
+        e.setSenha(null);
         e.setTarefas(tarefas);
         return e;
     }
