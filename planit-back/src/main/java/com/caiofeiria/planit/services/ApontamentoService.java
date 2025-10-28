@@ -64,4 +64,38 @@ public class ApontamentoService {
         
         return tarefasUsuario;
     }
+
+    public List<TarefaResponseDTO> listarTodosApontamentos() {
+        // Implementação simplificada - retorna todas as tarefas
+        return tarefaRepository.findAll()
+                .stream()
+                .map(TarefaMapper::toResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    public TarefaResponseDTO buscarApontamentoPorId(Long id) {
+        Validate.validarId(id);
+        Tarefa tarefa = tarefaRepository.findById(id)
+                .orElseThrow(TarefaNotFoundException::new);
+        return TarefaMapper.toResponseDTO(tarefa);
+    }
+
+    @Transactional
+    public void removerApontamento(Long usuarioId, Long tarefaId) {
+        Validate.validarId(usuarioId);
+        Validate.validarId(tarefaId);
+
+        Usuario usuario = repository.findById(usuarioId)
+                .orElseThrow(UsuarioNotFoundException::new);
+
+        Tarefa tarefa = tarefaRepository.findById(tarefaId)
+                .orElseThrow(TarefaNotFoundException::new);
+
+        if (usuario.getTarefas().contains(tarefa)) {
+            usuario.getTarefas().remove(tarefa);
+            repository.save(usuario);
+        } else {
+            throw new TarefaInvalidaException("O usuário " + usuario.getNome() + " não está associado à essa tarefa.");
+        }
+    }
 }
