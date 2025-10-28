@@ -30,5 +30,24 @@ public class ApontamentoController {
     public ResponseEntity<?> listarApontamentosDoUsuario(@PathVariable Long usuarioId) {
         return ResponseEntity.ok(service.listarTarefasDoUsuario(usuarioId));
     }
+
+    @Operation(summary = "Lista todos os apontamentos", description = "Retorna todos os apontamentos cadastrados")
+    @GetMapping
+    public ResponseEntity<?> getAll() {
+        return ResponseEntity.ok(service.listarTodosApontamentos());
+    }
+
+    @Operation(summary = "Busca apontamento por ID", description = "Retorna um apontamento específico")
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.buscarApontamentoPorId(id));
+    }
+
+    @Operation(summary = "Remove apontamento", description = "Remove a associação entre usuário e tarefa")
+    @DeleteMapping("/{usuarioId}/tarefas/{tarefaId}")
+    public ResponseEntity<?> deleteApontamento(@PathVariable Long usuarioId, @PathVariable Long tarefaId) {
+        service.removerApontamento(usuarioId, tarefaId);
+        return ResponseEntity.noContent().build();
+    }
 }
 
