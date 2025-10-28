@@ -17,5 +17,8 @@ public record ProjetoResponseDTO(
 
         @NotBlank
         @Size(min = 3, max = 255)
-        String descricao
+        String descricao,
+
+        @Size(max = 10)
+        String emoji
 ) {}

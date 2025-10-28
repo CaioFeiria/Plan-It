@@ -13,6 +13,9 @@ public record ProjetoRequestDTO(
 
         @NotBlank(message = "Adicione uma descrição ao Projeto.")
         @Size(min = 3, max = 255, message = "A descrição deve ter entre 3 e 255 caracteres.")
-        String descricao
+        String descricao,
+
+        @Size(max = 10, message = "Emoji deve ter no máximo 10 caracteres.")
+        String emoji
 ) {
 }

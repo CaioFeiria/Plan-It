@@ -30,10 +30,10 @@ public record TarefaRequestDTO(
 	    LocalDateTime dataConclusao,
 
 	    @NotNull(message = "Id do projeto não pode ser nulo.")
-		Long projetoId,
+		Long projeto,
 
 	    @NotNull(message = "Id do responsável não pode ser nulo.")
-		Long responsavelId,
+		Long responsavel,
 
 	    @Schema(
 	            description = "IDs dos usuários participantes da tarefa. Para não informar nenhum usuário, omita completamente este campo ou envie um array vazio []",

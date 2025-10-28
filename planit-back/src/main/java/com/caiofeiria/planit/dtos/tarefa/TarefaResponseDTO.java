@@ -32,10 +32,10 @@ public record TarefaResponseDTO(
     LocalDateTime dataConclusao,
 
     @NotNull
-    Projeto projetoId,
+    Projeto projeto,
 
     @NotNull
-    UsuarioResumoDTO responsavelId,
+    UsuarioResumoDTO responsavel,
 
     List<UsuarioResumoDTO> usuariosIds
 ) {}
