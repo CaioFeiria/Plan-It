@@ -31,7 +31,9 @@ public class AuthController {
     @Operation(summary = "Valida credenciais e gera token JWT")
     public ResponseEntity<TokenResponseDTO> login(@Valid @RequestBody LoginRequestDTO request) {
         Usuario usuario = usuarioService.validarLogin(request.getEmail(), request.getSenha());
-        String token = jwtService.gerarToken(usuario.getEmail());
+
+        String token = jwtService.gerarToken(usuario.getEmail(), usuario.getRole().getNome());
+
         UsuarioResponseDTO usuarioDTO = UsuarioMapper.toResponseDTO(usuario);
         return ResponseEntity.ok(new TokenResponseDTO(token, usuarioDTO));
     }
@@ -40,10 +42,10 @@ public class AuthController {
     @Operation(summary = "Cadastra usuário e retorna token JWT")
     public ResponseEntity<TokenResponseDTO> register(@Valid @RequestBody UsuarioRequestDTO request) {
         Usuario usuario = usuarioService.registrarUsuario(request);
-        String token = jwtService.gerarToken(usuario.getEmail());
+
+        String token = jwtService.gerarToken(usuario.getEmail(), usuario.getRole().getNome());
+
         UsuarioResponseDTO usuarioDTO = UsuarioMapper.toResponseDTO(usuario);
         return ResponseEntity.ok(new TokenResponseDTO(token, usuarioDTO));
     }
 }
-
-

@@ -7,12 +7,14 @@ import com.caiofeiria.planit.exceptions.invalid.InvalidBodyAndUrlId;
 import com.caiofeiria.planit.exceptions.notfound.TarefaNotFoundException;
 import com.caiofeiria.planit.exceptions.notfound.UsuarioNotFoundException;
 import com.caiofeiria.planit.mappers.UsuarioMapper;
+import com.caiofeiria.planit.models.Role;
 import com.caiofeiria.planit.models.Tarefa;
 import com.caiofeiria.planit.models.Usuario;
 import com.caiofeiria.planit.repositories.TarefaRepository;
 import com.caiofeiria.planit.repositories.UsuarioRepository;
 import com.caiofeiria.planit.utils.Validate;
 import jakarta.transaction.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,10 +26,18 @@ public class UsuarioService {
 
 	private final UsuarioRepository repository;
 	private final TarefaRepository tarefaRepository;
+	private final PasswordEncoder passwordEncoder;
+	private final RoleService roleService;
 
-	public UsuarioService(UsuarioRepository repository, TarefaRepository tarefaRepository){
+	public UsuarioService(UsuarioRepository repository, TarefaRepository tarefaRepository, PasswordEncoder passwordEncoder, RoleService roleService){
 		this.repository = repository;
 		this.tarefaRepository = tarefaRepository;
+		this.passwordEncoder = passwordEncoder;
+		this.roleService = roleService;
+	}
+
+	public Usuario buscarEntidadePorEmailExato(String email) {
+		return repository.findByEmail(email).orElseThrow(UsuarioNotFoundException::new);
 	}
 
 	public List<UsuarioResponseDTO> listarUsuarios() {
@@ -79,8 +89,47 @@ public class UsuarioService {
 	@Transactional
 	public UsuarioResponseDTO criarUsuario(UsuarioRequestDTO dto) {
 		Usuario usuario = UsuarioMapper.toEntity(dto);
+		usuario.setSenha(passwordEncoder.encode(dto.senha()));
+		
+		if (dto.role() != null && !dto.role().isEmpty()) {
+			Role role = roleService.findByNome(dto.role())
+				.orElseThrow(() -> new RuntimeException("Role " + dto.role() + " não encontrada"));
+			usuario.setRole(role);
+		} else {
+			Role rolePadrao = roleService.findByNome("USUARIO")
+				.orElseThrow(() -> new RuntimeException("Role USUARIO não encontrada"));
+			usuario.setRole(rolePadrao);
+		}
+		
 		repository.save(usuario);
 		return UsuarioMapper.toResponseDTO(usuario);
+	}
+
+	@Transactional
+	public Usuario registrarUsuario(UsuarioRequestDTO dto) {
+		Usuario usuario = UsuarioMapper.toEntity(dto);
+		usuario.setSenha(passwordEncoder.encode(dto.senha()));
+		
+		if (dto.role() != null && !dto.role().isEmpty()) {
+			Role role = roleService.findByNome(dto.role())
+				.orElseThrow(() -> new RuntimeException("Role " + dto.role() + " não encontrada"));
+			usuario.setRole(role);
+		} else {
+			Role rolePadrao = roleService.findByNome("USUARIO")
+				.orElseThrow(() -> new RuntimeException("Role USUARIO não encontrada"));
+			usuario.setRole(rolePadrao);
+		}
+		
+		repository.save(usuario);
+		return usuario;
+	}
+
+	public Usuario validarLogin(String email, String senha) {
+		Usuario usuario = repository.findByEmail(email).orElseThrow(UsuarioNotFoundException::new);
+		if (!passwordEncoder.matches(senha, usuario.getSenha())) {
+			throw new UsuarioNotFoundException();
+		}
+		return usuario;
 	}
 
 	@Transactional
