@@ -49,4 +49,16 @@ public class TarefaController {
         service.deletarTarefa(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/projeto/{projetoId}")
+    @Operation(summary = "Busca tarefas por projeto", description = "Retorna todas as tarefas de um projeto específico")
+    public ResponseEntity<?> getByProject(@PathVariable Long projetoId) {
+        return ResponseEntity.ok(service.buscarPorProjeto(projetoId));
+    }
+
+    @GetMapping("/responsavel/{responsavelId}")
+    @Operation(summary = "Busca tarefas por responsável", description = "Retorna todas as tarefas de um responsável específico")
+    public ResponseEntity<?> getByResponsible(@PathVariable Long responsavelId) {
+        return ResponseEntity.ok(service.buscarPorResponsavel(responsavelId));
+    }
 }
