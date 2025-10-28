@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
@@ -16,6 +16,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 	
 	@Query("SELECT u FROM Usuario u WHERE u.email LIKE %:email%")
 	List<Usuario> buscarPorEmail(@Param("email") String email);
+
+	Optional<Usuario> findByEmail(String email);
 
 	@Query(value = "SELECT tarefa_id FROM usuario_tarefa WHERE usuario_id = :id", nativeQuery = true)
 	List<Long> buscarTarefaIdsPorUsuario(@Param("id") Long usuarioId);
