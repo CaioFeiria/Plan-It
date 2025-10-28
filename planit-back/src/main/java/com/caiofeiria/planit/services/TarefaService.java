@@ -24,8 +24,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class TarefaService {
@@ -63,14 +61,14 @@ public class TarefaService {
 	@Transactional
 	public TarefaResponseDTO criarTarefa(TarefaRequestDTO dto) {
 		
-		if (dto.responsavelId() == null || dto.projetoId() == null) {
+		if (dto.responsavel() == null || dto.projeto() == null) {
 			throw new TarefaInvalidaException("A tarefa deve ter um responsável e estar vinculada a um projeto.");
 		}
 		
-		Projeto projeto = projetoRepository.findById(dto.projetoId())
+		Projeto projeto = projetoRepository.findById(dto.projeto())
 				.orElseThrow(ProjetoNotFoundException::new);
 		
-		Usuario usuario = usuarioRepository.findById(dto.responsavelId())
+		Usuario usuario = usuarioRepository.findById(dto.responsavel())
 				.orElseThrow(UsuarioNotFoundException::new);
 				
 		List<Long> usuariosIds = dto.usuariosIds();
@@ -98,10 +96,10 @@ public class TarefaService {
 			throw new InvalidBodyAndUrlId();
 		}
 		
-		Projeto projeto = projetoRepository.findById(dto.projetoId())
+		Projeto projeto = projetoRepository.findById(dto.projeto())
 				.orElseThrow(ProjetoNotFoundException::new);
 		
-		Usuario responsavel = usuarioRepository.findById(dto.responsavelId())
+		Usuario responsavel = usuarioRepository.findById(dto.responsavel())
 				.orElseThrow(UsuarioNotFoundException::new);
 		
 		List<Long> usuariosIds = dto.usuariosIds();
@@ -130,5 +128,43 @@ public class TarefaService {
 		usuarioRepository.deleteByTarefaId(existing.getId());
 		
 		tarefaRepository.deleteById(existing.getId());
+	}
+
+	public List<TarefaResponseDTO> buscarPorProjeto(Long projetoId) {
+		Validate.validarId(projetoId);
+		
+		projetoRepository.findById(projetoId)
+				.orElseThrow(ProjetoNotFoundException::new);
+		
+		List<TarefaResponseDTO> tarefas = tarefaRepository.findAll()
+				.stream()
+				.filter(tarefa -> tarefa.getProjeto().getId().equals(projetoId))
+				.map(TarefaMapper::toResponseDTO)
+				.toList();
+		
+		if (tarefas.isEmpty()) {
+			throw new TarefaNoContentException();
+		}
+		
+		return tarefas;
+	}
+
+	public List<TarefaResponseDTO> buscarPorResponsavel(Long responsavelId) {
+		Validate.validarId(responsavelId);
+		
+		usuarioRepository.findById(responsavelId)
+				.orElseThrow(UsuarioNotFoundException::new);
+		
+		List<TarefaResponseDTO> tarefas = tarefaRepository.findAll()
+				.stream()
+				.filter(tarefa -> tarefa.getResponsavel().getId().equals(responsavelId))
+				.map(TarefaMapper::toResponseDTO)
+				.toList();
+		
+		if (tarefas.isEmpty()) {
+			throw new TarefaNoContentException();
+		}
+		
+		return tarefas;
 	}
 }
