@@ -12,6 +12,12 @@ public record UsuarioRequestDTO(
 
     @NotBlank(message = "Digite o email do Usuário.")
     @Email(message = "Email inválido.")
-    String email
+    String email,
+
+    @NotBlank(message = "Digite a senha do Usuário.")
+    @Size(min = 6, max = 255, message = "A senha deve ter no mínimo 6 caracteres.")
+    String senha,
+    
+    String role
 ) {
 }

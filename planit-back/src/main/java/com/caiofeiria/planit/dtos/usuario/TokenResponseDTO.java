@@ -1,5 +1,8 @@
 package com.caiofeiria.planit.dtos.usuario;
 
+import lombok.Data;
+
+@Data
 public class TokenResponseDTO {
 
     private String token;

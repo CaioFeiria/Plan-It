@@ -21,5 +21,7 @@ public record UsuarioResponseDTO(
     @Email
     String email,
     
+    String role,
+    
     List<Tarefa> tarefas 
 ) {}
