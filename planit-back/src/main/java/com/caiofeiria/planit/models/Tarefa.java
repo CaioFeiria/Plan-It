@@ -1,6 +1,7 @@
 package com.caiofeiria.planit.models;
 
 import com.caiofeiria.planit.enums.Prioridade;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
@@ -22,7 +23,7 @@ import java.util.List;
 public class Tarefa {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tarefa_id")
     private Long id;
 
@@ -47,12 +48,15 @@ public class Tarefa {
 
     @ManyToOne
     @JoinColumn(name = "projeto_id")
+    @JsonIgnoreProperties({"tarefas"})
     private Projeto projeto;
     
     @ManyToOne
     @JoinColumn(name = "responsavel_id")
+    @JsonIgnoreProperties({"tarefas", "senha"})
     private Usuario responsavel;
 
     @ManyToMany(mappedBy = "tarefas")
+    @JsonIgnoreProperties({"tarefas", "senha"})
     private List<Usuario> usuarios;
 }
